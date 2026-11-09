@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="50%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#818cf8" />
+    </linearGradient>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="100%" stop-color="#fb7185" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#1e1b4b" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background rounded app icon -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+
+  <!-- Calendar base with shadow -->
+  <g filter="url(#shadow)">
+    <!-- Main white calendar body -->
+    <rect x="106" y="116" width="300" height="280" rx="36" fill="#ffffff"/>
+    
+    <!-- Calendar top header banner -->
+    <path d="M106 152 C106 132.118 122.118 116 142 116 L370 116 C389.882 116 406 132.118 406 152 L406 196 L106 196 Z" fill="url(#headerGrad)"/>
+
+    <!-- Calendar binders/rings -->
+    <rect x="176" y="92" width="20" height="48" rx="10" fill="#ffffff" stroke="#e11d48" stroke-width="4"/>
+    <rect x="316" y="92" width="20" height="48" rx="10" fill="#ffffff" stroke="#e11d48" stroke-width="4"/>
+
+    <!-- Celebration Sparkles / Star in center -->
+    <path d="M256 225 L268 266 L310 274 L276 300 L287 342 L256 318 L225 342 L236 300 L202 274 L244 266 Z" fill="#4f46e5"/>
+    
+    <!-- Mini accent dots -->
+    <circle cx="166" cy="330" r="12" fill="#fbbf24"/>
+    <circle cx="346" cy="330" r="12" fill="#38bdf8"/>
+    <circle cx="256" cy="280" r="6" fill="#ffffff"/>
+  </g>
+
+  <!-- Sparkles outside -->
+  <circle cx="100" cy="85" r="8" fill="#fef08a"/>
+  <circle cx="410" cy="95" r="10" fill="#fef08a"/>
+  <circle cx="420" cy="420" r="8" fill="#fbcfe8"/>
+</svg>

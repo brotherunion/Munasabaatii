@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مناسباتي - رفيقك لتنظيم مناسبات الأهل والأصدقاء والعمل</title>
+    <script>
+      // Gracefully mock Vite HMR WebSocket in sandbox iframe environment where WebSockets cannot connect
+      (function() {
+        // Intercept console.error to silence expected Vite HMR connection closed messages
+        const originalConsoleError = console.error;
+        console.error = function(...args) {
+          const message = args.map(function(arg) {
+            if (!arg) return '';
+            if (typeof arg === 'string') return arg;
+            if (arg instanceof Error) return arg.message + ' ' + (arg.stack || '');
+            try { return JSON.stringify(arg); } catch(e) { return String(arg); }
+          }).join(' ');
+
+          if (
+            message.includes('WebSocket closed without opened') ||
+            message.includes('failed to connect to websocket') ||
+            (message.includes('[vite]') && (message.includes('WebSocket') || message.includes('ws://') || message.includes('wss://'))) ||
+            (args[0] === '[vite]' && args[1] && (args[1] instanceof Error || typeof args[1] === 'string') && String(args[1]).includes('WebSocket'))
+          ) {
+            return;
+          }
+          originalConsoleError.apply(console, args);
+        };
+
+        // Intercept window error and unhandledrejection
+        window.addEventListener('error', function(event) {
+          var msg = (event && (event.message || (event.error && event.error.message))) || '';
+          if (msg.includes('WebSocket') || msg.includes('ws://') || msg.includes('wss://')) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            return true;
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function(event) {
+          var reason = event && event.reason;
+          var msg = reason ? (reason.message || String(reason)) : '';
+          if (msg.includes('WebSocket') || msg.includes('ws://') || msg.includes('wss://')) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            return true;
+          }
+        }, true);
+
+        // Mock WebSocket for Vite HMR so Vite client resolves its connection promise cleanly without throwing
+        var OriginalWebSocket = window.WebSocket;
+        if (OriginalWebSocket) {
+          window.WebSocket = function(url, protocols) {
+            var urlStr = String(url || '');
+            var isViteHmr = 
+              protocols === 'vite-hmr' ||
+              (Array.isArray(protocols) && protocols.includes('vite-hmr')) ||
+              urlStr.includes('vite-hmr') ||
+              urlStr.includes('token=');
+
+            if (isViteHmr) {
+              var listeners = {};
+              var mockSocket = {
+                readyState: 1, // OPEN
+                CONNECTING: 0,
+                OPEN: 1,
+                CLOSING: 2,
+                CLOSED: 3,
+                url: urlStr,
+                protocol: 'vite-hmr',
+                extensions: '',
+                bufferedAmount: 0,
+                binaryType: 'blob',
+                onopen: null,
+                onclose: null,
+                onerror: null,
+                onmessage: null,
+                send: function() {},
+                close: function() {
+                  mockSocket.readyState = 3;
+                  var ev = new Event('close');
+                  if (mockSocket.onclose) mockSocket.onclose(ev);
+                  (listeners['close'] || []).forEach(function(cb) { cb(ev); });
+                },
+                addEventListener: function(type, listener) {
+                  listeners[type] = listeners[type] || [];
+                  listeners[type].push(listener);
+                },
+                removeEventListener: function(type, listener) {
+                  if (listeners[type]) {
+                    listeners[type] = listeners[type].filter(function(cb) { return cb !== listener; });
+                  }
+                },
+                dispatchEvent: function(event) {
+                  var handlers = listeners[event.type] || [];
+                  handlers.forEach(function(cb) { cb(event); });
+                  return true;
+                }
+              };
+
+              setTimeout(function() {
+                var openEv = new Event('open');
+                if (mockSocket.onopen) mockSocket.onopen(openEv);
+                (listeners['open'] || []).forEach(function(cb) { cb(openEv); });
+              }, 0);
+
+              return mockSocket;
+            }
+
+            return new OriginalWebSocket(url, protocols);
+          };
+
+          window.WebSocket.CONNECTING = OriginalWebSocket.CONNECTING;
+          window.WebSocket.OPEN = OriginalWebSocket.OPEN;
+          window.WebSocket.CLOSING = OriginalWebSocket.CLOSING;
+          window.WebSocket.CLOSED = OriginalWebSocket.CLOSED;
+          window.WebSocket.prototype = OriginalWebSocket.prototype;
+        }
+      })();
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="تطبيق مناسباتي لتنظيم وتتبع مناسبات الأهل والأصدقاء والعمل، مع خزنة خاصة مشفرة ومحمية ببصمة الهاتف." />
+    <meta property="og:title" content="مناسباتي - رفيقك لكل احتفال" />
+    <meta property="og:description" content="تنظيم وتتبع مناسبات الأهل والأصدقاء والعمل مع خزنة خاصة مؤمنة بالبصمة وتوليد تهانٍ بالذكاء الاصطناعي." />
+    <meta name="theme-color" content="#4338ca" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="مناسباتي" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- Google Identity Services & GAPI -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://apis.google.com/js/api.js" async defer></script>
+    <style>
+      body {
+        font-family: 'Cairo', sans-serif;
+        scroll-behavior: smooth;
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+    </style>
+    <link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-slate-50 text-slate-900 overflow-x-hidden">
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

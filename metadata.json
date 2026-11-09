@@ -1,0 +1,8 @@
+{
+  "name": "Remix Remix Remix مناسباتي - Munasabati",
+  "description": "تطبيق لتنظيم وتذكير المناسبات الخاصة والعامة مع ميزة توليد تهانٍ مخصصة باستخدام الذكاء الاصطناعي.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
